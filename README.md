@@ -29,6 +29,12 @@ Git est un outil de gestion de versions décentralisé, et GitHub est une platef
    ```
    Cela définit l'éditeur de texte utilisé pour modifier des messages de commit ou résoudre des conflits. Vous pouvez remplacer `notepad++` par l'éditeur de votre choix (comme `vim`, `nano`, ou `code` pour Visual Studio Code).
 
+4. **Vérifier les configurations actuelles :**
+   ```bash
+   git config --list
+   ```
+   Cette commande affiche toutes les configurations actuelles pour votre environnement Git.
+
 ---
 
 ## Initialiser un dépôt Git
@@ -38,6 +44,16 @@ Git est un outil de gestion de versions décentralisé, et GitHub est une platef
    git init
    ```
    Cette commande crée un nouveau dépôt Git dans le dossier courant. Un répertoire caché `.git` est créé pour stocker toutes les informations relatives au dépôt.
+
+2. **Cloner un dépôt existant :**
+   ```bash
+   git clone <url_du_dépôt>
+   ```
+   Par exemple :
+   ```bash
+   git clone https://github.com/nom-utilisateur/nom-du-repo.git
+   ```
+   Cela télécharge le dépôt et son historique dans un nouveau dossier local.
 
 ---
 
@@ -64,6 +80,18 @@ Git est un outil de gestion de versions décentralisé, et GitHub est une platef
    git commit -m "Ajout des fichiers HTML et CSS"
    ```
    > **Conseil :** Écrivez des messages de commit clairs et concis pour faciliter la compréhension de l'historique.
+
+3. **Vérifier l'état actuel du dépôt :**
+   ```bash
+   git status
+   ```
+   Cette commande liste les fichiers modifiés, ceux en attente d'ajout et ceux déjà dans l'index.
+
+4. **Vérifier les différences dans les fichiers :**
+   ```bash
+   git diff
+   ```
+   Cela montre les différences non encore ajoutées entre les fichiers modifiés et la dernière version dans Git.
 
 ---
 
@@ -103,6 +131,12 @@ Git est un outil de gestion de versions décentralisé, et GitHub est une platef
    git checkout -b feature-login
    ```
 
+5. **Supprimer une branche :**
+   ```bash
+   git branch -d <nom_de_la_branche>
+   ```
+   Cela supprime une branche déjà fusionnée.
+
 ---
 
 ## Fusion de branches
@@ -117,7 +151,12 @@ Git est un outil de gestion de versions décentralisé, et GitHub est une platef
    ```
    Cela fusionne les modifications de la branche `feature-login` dans la branche courante.
 
-> **Note :** En cas de conflit, Git vous demandera de résoudre les conflits manuellement avant de finaliser la fusion.
+2. **Résolution des conflits :**
+   En cas de conflit, Git vous demandera de résoudre les conflits manuellement avant de finaliser la fusion. Vous devrez ouvrir les fichiers concernés, résoudre les conflits, puis effectuer un commit :
+   ```bash
+   git add <fichier_conflit>
+   git commit -m "Résolution des conflits"
+   ```
 
 ---
 
@@ -135,6 +174,32 @@ Git est un outil de gestion de versions décentralisé, et GitHub est une platef
    ```
    Cette commande copie un commit spécifique (identifié par son hash) dans la branche courante. Cela peut être utile pour appliquer des corrections sans fusionner une branche entière.
 
+3. **Annuler un commit avec `git revert` :**
+   ```bash
+   git revert <hash_du_commit>
+   ```
+   Cette commande crée un nouveau commit qui annule les modifications introduites par un commit précédent, sans modifier l'historique. Par exemple :
+   ```bash
+   git revert a1b2c3d
+   ```
+
+4. **Réinitialiser l'état avec `git reset` :**
+   - **Réinitialiser seulement la zone de staging :**
+     ```bash
+     git reset <nom_du_fichier>
+     ```
+     Cela retire un fichier de la zone de staging tout en gardant les modifications dans le dossier de travail.
+   - **Réinitialiser un commit et garder les modifications :**
+     ```bash
+     git reset --soft <hash_du_commit>
+     ```
+     Cela déplace l'état du dépôt à un commit précédent sans affecter les fichiers modifiés.
+   - **Réinitialiser un commit et supprimer les modifications :**
+     ```bash
+     git reset --hard <hash_du_commit>
+     ```
+     Cela restaure complètement l'état du dépôt (fichiers et historique) à un commit donné.
+
 ---
 
 ## Suivi et récupération des modifications
@@ -145,87 +210,80 @@ Git est un outil de gestion de versions décentralisé, et GitHub est une platef
    ```
    Cela affiche toutes les actions effectuées dans le dépôt, y compris les changements de branche, les resets, les merges, etc.
 
-2. **Mettre de côté des modifications :**
+2. **Mettre de côté des modifications avec `git stash` :**
    ```bash
    git stash
    ```
-   Cela enregistre les modifications non indexées pour les récupérer plus tard. Les fichiers reviennent à leur état précédent.
-
-   **Exemple d'utilisation :**
-   - Vous travaillez sur un fichier mais devez passer à une autre branche pour une tâche urgente. Faites :
+   Cela enregistre temporairement les modifications non commit pour nettoyer l'espace de travail.
+   - **Récupérer les modifications mises de côté :**
      ```bash
-     git stash
+     git stash pop
      ```
-   - Après avoir terminé sur l'autre branche, revenez et appliquez la remise :
-     ```bash
-     git stash apply
-     ```
+     Cette commande restaure les modifications mises de côté et les retire de la liste de stash.
 
-3. **Lister les remises disponibles :**
+3. **Afficher la liste des stashs :**
    ```bash
    git stash list
    ```
 
 ---
 
-## Publier sur GitHub
+## Travailler avec GitHub
 
-1. **Ajouter un dépôt distant :**
+1. **Lier un dépôt local à un dépôt distant :**
    ```bash
-   git remote add origin <url_du_depot>
+   git remote add origin <url_du_dépôt>
    ```
    Exemple :
    ```bash
-   git remote add origin git@github.com:username/repository.git
+   git remote add origin https://github.com/nom-utilisateur/nom-du-repo.git
    ```
 
-2. **Envoyer les commits au dépôt distant :**
+2. **Pousser les modifications vers le dépôt distant :**
    ```bash
    git push -u origin <nom_de_la_branche>
    ```
-   Exemple :
+   Cela envoie vos commits locaux au dépôt distant. Par exemple :
    ```bash
    git push -u origin main
    ```
 
+3. **Récupérer les modifications du dépôt distant :**
+   ```bash
+   git pull origin <nom_de_la_branche>
+   ```
+   Cela synchronise les changements distants avec votre dépôt local.
+
+4. **Cloner un dépôt existant :**
+   ```bash
+   git clone <url_du_dépôt>
+   ```
+   Exemple :
+   ```bash
+   git clone https://github.com/nom-utilisateur/nom-du-repo.git
+   ```
+
 ---
 
-## Annexes
+## Bonnes pratiques
 
-### Générer une clé SSH
+1. **Utiliser des messages de commit clairs et significatifs :**
+   Chaque message de commit doit décrire brièvement les changements effectués.
 
-1. **Créer une clé SSH :**
-   ```bash
-   ssh-keygen -t ed25519 -C "votre_email@example.com"
-   ```
+2. **Travailler avec des branches pour des fonctionnalités spécifiques :**
+   Créez une nouvelle branche pour chaque nouvelle fonctionnalité ou correction de bug.
 
-2. **Copier la clé dans le presse-papier :**
-   ```bash
-   clip < ~/.ssh/id_ed25519.pub
-   ```
+3. **Effectuer des revues de code avant de fusionner :**
+   Travaillez en équipe pour valider les modifications avant de les intégrer à la branche principale.
 
-3. **Ajouter la clé SSH à GitHub :**
-   - Rendez-vous dans les paramètres de GitHub.
-   - Ajoutez une nouvelle clé SSH et collez la clé générée.
+---
 
-### Commandes utiles supplémentaires
+## Ressources supplémentaires
 
-- **Supprimer une branche localement :**
-  ```bash
-  git branch -d <nom_de_la_branche>
-  ```
+- [Documentation officielle de Git](https://git-scm.com/doc)
+- [Guide GitHub](https://docs.github.com)
+- [Try Git](https://try.github.io) - Un tutoriel interactif pour apprendre les bases de Git.
 
-- **Supprimer une branche avec des modifications non fusionnées :**
-  ```bash
-  git branch -D <nom_de_la_branche>
-  ```
+---
 
-- **Lister les différences entre fichiers :**
-  ```bash
-  git diff
-  ```
-
-- **Voir l'état du dépôt :**
-  ```bash
-  git status
-  ```
+Avec ces commandes et bonnes pratiques, vous êtes prêt à gérer vos projets avec Git et GitHub efficacement. Bonne gestion de versions !
